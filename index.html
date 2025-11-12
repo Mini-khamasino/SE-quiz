@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Engineering Quiz</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        h2 {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        #quiz-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+        }
+        .question-block {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .question-block.correct {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4CAF50;
+        }
+        .question-block.incorrect {
+            background-color: #ffebee;
+            border-left: 5px solid #f44336;
+        }
+        .question-text {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        .question-text img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .options-container label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .options-container label:hover {
+            background-color: #f9f9f9;
+        }
+        .options-container input[type="radio"] {
+            margin-right: 10px;
+        }
+        #submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            background-color: #2ecc71;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+        }
+        #submit-btn:hover {
+            background-color: #27ae60;
+        }
+        #results {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        #results.pass {
+            background-color: #e8f5e9;
+            color: #4CAF50;
+        }
+        #results.fail {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Software Engineering Quiz</h1>
+    <div id="quiz-container">
+        <div id="quiz-form"></div>
+        <button id="submit-btn">Submit Quiz</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // All questions extracted from the PDF
+        const quizData = [
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "1. Choose the correct option from the following. The software consists of......",
+                options: [
+                    "Program + documentation operating procedures.",
+                    "Program + hardware manuals.",
+                    "Instruction + hardware manuals.",
+                    "Set of programs."
+                ],
+                answer: "Program + documentation operating procedures."
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "2. What is the difference between software engineering and computer science?",
+                options: [
+                    "Software engineering deals with hardware, while computer science deals with software",
+                    "Software engineering is concerned with the development and evolution of software systems, while computer science is concerned with the study of algorithms and data structures",
+                    "There is no difference.",
+                    "Computer science focuses on software engineering principles."
+                ],
+                answer: "Software engineering is concerned with the development and evolution of software systems, while computer science is concerned with the study of algorithms and data structures"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "3. What is the main goal of requirement engineering?",
+                options: [
+                    "Designing software interfaces",
+                    "Testing software products",
+                    "finding out and analyzing the services and constraints that the system should provide.",
+                    "Managing software projects"
+                ],
+                answer: "finding out and analyzing the services and constraints that the system should provide."
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "4. Which of the following is not users of a system requirements document.",
+                options: [
+                    "Client Engineer",
+                    "Software Engineer",
+                    "Client Manager",
+                    "System Architect"
+                ],
+                answer: "Client Engineer"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "5. What is the primary difference between functional and not-functional requirements.",
+                options: [
+                    "Functional requirements are statements of services the system should provide, while not-functional requirements are statements of how the system should react to particular inputs.",
+                    "Functional requirements are statements of services the system should provide, while not-functional requirements are statements of how the system should behave in particular situations.",
+                    "Functional requirements are statements of services the system should provide, while not-functional requirements are statements of constraints on the services or functions offered by the system.",
+                    "None of the mentioned"
+                ],
+                answer: "Functional requirements are statements of services the system should provide, while not-functional requirements are statements of constraints on the services or functions offered by the system."
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "6. Which of the following is a concern of product requirements?",
+                options: [
+                    "Reliability",
+                    "Usability",
+                    "Security",
+                    "All of the mentioned"
+                ],
+                answer: "All of the mentioned"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "7. What is the main objective of Reuse-oriented software engineering?",
+                options: [
+                    "To develop software systems by building everything from scratch.",
+                    "To reuse existing software components to reduce development time and cost.",
+                    "To ignore previous work and start fresh in every project",
+                    "To reinvent the wheel for every project"
+                ],
+                answer: "To reuse existing software components to reduce development time and cost."
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "9. Which of the following is NOT a characteristic of software engineering?",
+                options: [
+                    "Applying engineering principles to software development.",
+                    "Focusing only on coding and implementation.",
+                    "Using systematic approaches.",
+                    "Incorporating knowledge from other disciplines."
+                ],
+                answer: "Focusing only on coding and implementation."
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "10. What does the term \"software process\" refer to?",
+                options: [
+                    "A set of activities that lead to the production of a software system",
+                    "The physical environment in which software development takes place",
+                    "The tools and technologies used in software development",
+                    "The documentation produced during software development"
+                ],
+                answer: "A set of activities that lead to the production of a software system"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "11. Which of the following is NOT a software engineering activity?",
+                options: [
+                    "Software specification",
+                    "Software validation",
+                    "Software procurement",
+                    "Software evolution"
+                ],
+                answer: "Software procurement"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "12. What are the two fundamental types of software product?",
+                options: [
+                    "System software and application software",
+                    "Freeware and shareware",
+                    "Open-source software and closed-source software",
+                    "Generic products and customized products"
+                ],
+                answer: "Generic products and customized products"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "13. What does the term \"competence\" mean in software engineering ethics?",
+                options: [
+                    "You should knowingly accept work that is outside your competence.",
+                    "You should not misrepresent your level of competence.",
+                    "You should be careful to ensure that the intellectual property of employers.",
+                    "All of the mentioned."
+                ],
+                answer: "You should not misrepresent your level of competence."
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "14. What does SDLC stand for?",
+                options: [
+                    "System Design Life Cycle",
+                    "Software Design Life Cycle",
+                    "Software Development Life Cycle",
+                    "System Development Life cycle"
+                ],
+                answer: "Software Development Life Cycle"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "15. process descriptions may also include:",
+                options: [
+                    "Pre-and Post-conditions",
+                    "Roles",
+                    "Products",
+                    "All of the mentioned"
+                ],
+                answer: "All of the mentioned"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "16. The goal of software process models is to..",
+                options: [
+                    "Manage risks.",
+                    "Produce high quality software.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "17. What is the main drawback of the waterfall model?",
+                options: [
+                    "difficulty of accommodating change",
+                    "Inability to handle large projects",
+                    "Limited documentation.",
+                    "Slow development process."
+                ],
+                answer: "difficulty of accommodating change"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "mcq",
+                question: "18. Which of the following is a key advantage of the incremental development approach",
+                options: [
+                    "Easier to get customer feedback.",
+                    "More rapid delivery",
+                    "The cost of accommodating changing customer requirements is reduced.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "tf",
+                question: "1. In Plan-driven processes, all of the process activities are planned in advance and progress is measured against this plan.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "tf",
+                question: "2. Software costs more to maintain than it does to develop.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "tf",
+                question: "3. The waterfall model is an example of an agile process.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "tf",
+                question: "4. There is no ideal software process.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "tf",
+                question: "5. For large and complex systems, it is practically impossible to achieve requirements consistency and completeness.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "tf",
+                question: "6. Development processes are less challenging than maintenance processes.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 6-4-2024 (Midterm)",
+                type: "tf",
+                question: "7. A prototype system is an example of 'change tolerance' approach.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "1. What is software ?",
+                options: [
+                    "Software is documentation and configuration of data.",
+                    "Software is a set of programs.",
+                    "Software is a set of programs, and documentation.",
+                    "None of the mentioned."
+                ],
+                answer: "Software is a set of programs, and documentation."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "2. Which of these software engineering activities are not a part of software processes ?",
+                options: [
+                    "Software development",
+                    "Software dependence",
+                    "Software validation",
+                    "Software specification"
+                ],
+                answer: "Software dependence"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "3. What does the term \"software process\" refer to?",
+                options: [
+                    "A set of activities that lead to the production of a software system",
+                    "The physical environment in which software development takes place",
+                    "The tools and technologies used in software development",
+                    "The documentation produced during software development"
+                ],
+                answer: "A set of activities that lead to the production of a software system"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "4. What is the difference between software engineering and computer science?",
+                options: [
+                    "Computer science focuses on theory and fundamentals, while software engineering is concerned with the practicalities of developing and delivering useful software.",
+                    "Computer science is concerned with the practicalities of developing and delivering useful software, while software engineering focuses on theory and fundamentals.",
+                    "None of the mentioned."
+                ],
+                answer: "Computer science focuses on theory and fundamentals, while software engineering is concerned with the practicalities of developing and delivering useful software."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "5. What are the two fundamental types of software product?",
+                options: [
+                    "System software and application software",
+                    "Freeware and shareware",
+                    "Open-source software and closed-source software",
+                    "Generic products and customized products"
+                ],
+                answer: "Generic products and customized products"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "6. Confidentiality is a key ethical principle. This includes:",
+                options: [
+                    "Sharing all project details openly on social media.",
+                    "Protecting sensitive client information even after the project ends.",
+                    "Discussing project challenges with online forums anonymously.",
+                    "Disclosing project details to a competitor for personal gain."
+                ],
+                answer: "Protecting sensitive client information even after the project ends."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "7. What does SDLC stand for?",
+                options: [
+                    "System Design Life Cycle",
+                    "Software Design Life Cycle",
+                    "Software Development Life Cycle",
+                    "System Development Life cycle"
+                ],
+                answer: "Software Development Life Cycle"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "8. Agile methodologies typically:",
+                options: [
+                    "Have long-term fixed plans and schedules",
+                    "Require detailed documentation before starting development",
+                    "Embrace change, even late in development",
+                    "Avoid customer involvement until software delivery"
+                ],
+                answer: "Embrace change, even late in development"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "9. The goal of software process models is to...",
+                options: [
+                    "Manage risks.",
+                    "Produce high quality software.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "10. Software testing is one element of a broader topic that is often referred to as....",
+                options: [
+                    "Verification",
+                    "Validation",
+                    "Verification and Validation.",
+                    "None of these"
+                ],
+                answer: "Verification and Validation."
+            },
+            
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "12. Which of the following is an example of a reusable software component?",
+                options: [
+                    "Web services.",
+                    ".Net framework.",
+                    "J2EE.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "13. What is the purpose of component analysis in reuse-oriented software engineering?",
+                options: [
+                    "To search for components to implement the specifications.",
+                    "To enforce strict licensing agreements for the use of the component.",
+                    "To consider the components that are reused and organize the framework to cater for this.",
+                    "All of the mentioned"
+                ],
+                answer: "To search for components to implement the specifications."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "14. What is the main drawback of the waterfall model?",
+                options: [
+                    "Lack of customer involvement",
+                    "Inability to handle large projects",
+                    "Limited documentation",
+                    "Slow development process"
+                ],
+                answer: "Lack of customer involvement"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "15. Which of the following is a potential drawback of the incremental development approach?",
+                options: [
+                    "increments System structure tends to degrade as new increments are added.",
+                    "Limited opportunities for stakeholder involvement.",
+                    "Incompatibility with agile development methodologies.",
+                    "Inability to deliver a working product incrementally."
+                ],
+                answer: "increments System structure tends to degrade as new increments are added."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "16. What is the main objective of Reuse-oriented software engineering?",
+                options: [
+                    "To develop software systems by building everything from scratch.",
+                    "To reuse existing software components to reduce development time and cost.",
+                    "To ignore previous work and start fresh in every project",
+                    "To reinvent the wheel for every project"
+                ],
+                answer: "To reuse existing software components to reduce development time and cost."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "17. Which software engineering activity focuses on transforming requirements into an executable system?",
+                options: [
+                    "Testing",
+                    "Maintenance",
+                    "Implementation",
+                    "Analysis"
+                ],
+                answer: "Implementation"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "18. What is the meaning of requirement elicitation in software engineering?",
+                options: [
+                    "Gathering of requirement.",
+                    "Understanding of requirement.",
+                    "Getting the requirements from client.",
+                    "All of the above."
+                ],
+                answer: "All of the above."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "19. What is the purpose of requirements validation in software specification?",
+                options: [
+                    "To identify potential risks and develop strategies to mitigate them",
+                    "To ensure that the requirements are complete, consistent, and correct.",
+                    "To evaluate and prioritize the requirements based on their importance and feasibility.",
+                    "To check if the requirements are technically feasible or not."
+                ],
+                answer: "To ensure that the requirements are complete, consistent, and correct."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "20. Which of the following best describes 'Change tolerance?'",
+                options: [
+                    "This normally involves some form of incremental development.",
+                    "Proposed changes may be implemented in increments that have not yet been developed.",
+                    "The software process includes activities that can anticipate possible changes before significant rework is required.",
+                    "both a, and b."
+                ],
+                answer: "both a, and b."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "21. Which one is the functional requirement",
+                options: [
+                    "Hight performance of software.",
+                    "Find the basic salary of an employee.",
+                    "User friendly interface.",
+                    "Reliability of software."
+                ],
+                answer: "Find the basic salary of an employee."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "22. Which of the following is not users of a user requirements document.",
+                options: [
+                    "Client Engineer",
+                    "Software Engineer",
+                    "Client Manager",
+                    "System Architect"
+                ],
+                answer: "Software Engineer"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "mcq",
+                question: "23. Which of the following is an example of an ambiguous requirement?",
+                options: [
+                    "The software should be fast.",
+                    "The software should be compatible with ios 17.4.1.",
+                    "The software should be delivered by the end of the month.",
+                    "All of the mentioned."
+                ],
+                answer: "The software should be fast."
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "tf",
+                question: "1. For custom software, evolution costs often exceed development costs.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "tf",
+                question: "2. SDLC is not a well-defined, structured sequence of stages in software engineering to develop the intended software product.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "tf",
+                question: "3. There are no universal software engineering methods and techniques that are suitable for all systems and all companies.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "tf",
+                question: "4. The waterfall model is an example of an agile process.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "tf",
+                question: "5. The intermediate stages in a reuse-oriented process are the same of the waterfall model.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "tf",
+                question: "6. Change is inevitable in all large software projects.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Midterm)",
+                type: "tf",
+                question: "7. A prototype system is an example of 'Change avoidance' approach.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "1. What is software?",
+                options: [
+                    "Software is documentation and configuration of data.",
+                    "Software is a set of programs.",
+                    "A Software is a set of programs, and documentation.",
+                    "None of the mentioned."
+                ],
+                answer: "A Software is a set of programs, and documentation."
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "2. Which of these software engineering activities are not a part of software processes?",
+                options: [
+                    "Software development",
+                    "Software dependence",
+                    "Software validation",
+                    "Software specification"
+                ],
+                answer: "Software dependence"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "3. The software development process is:",
+                options: [
+                    "A rigid, step-by-step sequence of activities.",
+                    "A framework for planning, developing, deploying, and maintaining software.",
+                    "Entirely dependent on the programming language used.",
+                    "Not applicable in modern software engineering practices."
+                ],
+                answer: "A framework for planning, developing, deploying, and maintaining software."
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "4. What is the difference between software engineering and computer science?",
+                options: [
+                    "Computer science focuses on theory and fundamentals, while software engineering is concerned with the practicalities Of developing and delivering useful software.",
+                    "Computer science is concerned with the practicalities of developing and delivering useful software, while software engineering focuses on theory and fundamentals.",
+                    "None of the mentioned."
+                ],
+                answer: "Computer science focuses on theory and fundamentals, while software engineering is concerned with the practicalities Of developing and delivering useful software."
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "5. What is software engineering ethics?",
+                options: [
+                    "The principles that govern the behavior Of software engineers",
+                    "The study of computer ethics",
+                    "The principles that govern the behavior of computers",
+                    "All of the mentioned"
+                ],
+                answer: "The principles that govern the behavior Of software engineers"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "6. What does the term \"competence\" mean in software engineering ethics?",
+                options: [
+                    "You should knowingly accept work that is outside your competence.",
+                    "You should not misrepresent your level of competence.",
+                    "You should be careful to ensure that the intellectual property of employers.",
+                    "All of the mentioned."
+                ],
+                answer: "You should not misrepresent your level of competence."
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "7. Which of the following best describes a plan-driven approach to software development?",
+                options: [
+                    "Emphasizes flexibility and customer collaboration",
+                    "Involves detailed planning and predictable processes",
+                    "Focuses on rapid delivery of complete software products",
+                    "Prioritizes software development speed over all other factors"
+                ],
+                answer: "Involves detailed planning and predictable processes"
+            },
+            
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "9. The waterfall model of software development is suitable when",
+                options: [
+                    "The project is short.",
+                    "The best approach to use for projects with large development teams.",
+                    "There are no ambiguous requirements.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "10. Which of the following best describes the incremental development approach?",
+                options: [
+                    "Developing software in a single, large iteration.",
+                    "Developing software in small, manageable increments.",
+                    "Developing software without any planning or design.",
+                    "Developing software using a waterfall methodology"
+                ],
+                answer: "Developing software in small, manageable increments."
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "11. COTS stands for",
+                options: [
+                    "Commercial Off-The-Shelf systems",
+                    "Commercial Off-The-Shelf states",
+                    "Commercial Off-The-System state",
+                    "None of the mentioned"
+                ],
+                answer: "Commercial Off-The-Shelf systems"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "12. What is the main objective of Reuse-oriented software engineering?",
+                options: [
+                    "To develop software systems by building everything from scratch.",
+                    "To reuse existing software components to reduce development time and cost.",
+                    "To ignore previous work and start fresh in every project",
+                    "To reinvent the wheel for every project."
+                ],
+                answer: "To reuse existing software components to reduce development time and cost."
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "13. Requirement engineering process includes which of these steps?",
+                options: [
+                    "Feasibility study",
+                    "Requirement Gathering",
+                    "Software Requirement specification & Validation",
+                    "All mentioned above"
+                ],
+                answer: "All mentioned above"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "14. Which process activity involves transforming software design specifications into executable code?",
+                options: [
+                    "Software deployment",
+                    "Software maintenance",
+                    "Software implementation",
+                    "Software documentation"
+                ],
+                answer: "Software implementation"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "mcq",
+                question: "15. Which of the following best describes 'Change tolerance'?",
+                options: [
+                    "This normally involves some form of incremental development.",
+                    "Proposed changes may be implemented in increments that have not yet been developed.",
+                    "The software process includes activities that can anticipate possible changes before significant rework is required.",
+                    "both a, and b."
+                ],
+                answer: "both a, and b."
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "tf",
+                question: "1. For custom software, evolution costs often exceed development costs.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "tf",
+                question: "2. Examples of generic products of software are word processors and drawing packages.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "tf",
+                question: "3. The waterfall model is a fundamental part of agile approaches.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "tf",
+                question: "4. Late increments of the incremental development include the most important required functionality.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "tf",
+                question: "5. In reuse-oriented software engineering, reused elements may be configured to adapt their behavior and functionality to a user's requirements.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "tf",
+                question: "6. Development processes are less challenging than maintenance processes.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "tf",
+                question: "7. Verification ensures that \"Are we building the product, right?\".",
+                answer: "True"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "tf",
+                question: "8. Real software processes are interleaved sequences of technical and managerial activities with the overall goal of specifying, designing, implementing, and testing a software system.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "tf",
+                question: "9. There are no universal software engineering methods and techniques that are suitable for all systems and all companies.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 19-11-2024 (Midterm)",
+                type: "tf",
+                question: "10. Program testing, Where the system is executed using simulated test data, is the principal validation technique.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "1. Which of the following is NOT a characteristic of software engineering?",
+                options: [
+                    "Applying engineering principles to software development.",
+                    "Focusing only on coding and implementation.",
+                    "Using systematic approaches.",
+                    "Incorporating knowledge from other disciplines."
+                ],
+                answer: "Focusing only on coding and implementation."
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "2. What does the term \"software process\" refer to?",
+                options: [
+                    "A set of activities that lead to the production of a software system",
+                    "The physical environment in which software development takes place",
+                    "The tools and technologies used in software development",
+                    "The documentation produced during software development"
+                ],
+                answer: "A set of activities that lead to the production of a software system"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "3. Which of the following is NOT a benefit of using a software development methodology?",
+                options: [
+                    "Improved communication and collaboration among stakeholders.",
+                    "Increased risk of project failure.",
+                    "Enhanced software quality.",
+                    "More efficient use of resources."
+                ],
+                answer: "Increased risk of project failure."
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "4. What are the two fundamental types of software product?",
+                options: [
+                    "System software and application software",
+                    "Freeware and shareware",
+                    "Open-source software and closed-source software",
+                    "Generic products and customized products"
+                ],
+                answer: "Generic products and customized products"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "5. Which of the following is\\are considered as general issues that affect different types of software?",
+                options: [
+                    "Security",
+                    "Business change",
+                    "Heterogeneity",
+                    "All of the mentioned"
+                ],
+                answer: "All of the mentioned"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "6. What is the first step in the software development lifecycle?",
+                options: [
+                    "System Design",
+                    "Coding",
+                    "System Testing",
+                    "Preliminary Investigation and Analysis"
+                ],
+                answer: "Preliminary Investigation and Analysis"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "7. What is the main drawback of the waterfall model?",
+                options: [
+                    "difficulty of accommodating change",
+                    "Inability to handle large projects",
+                    "Limited documentation.",
+                    "Slow development process."
+                ],
+                answer: "difficulty of accommodating change"
+            },
+            
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "9. Which of the following is a key advantage of the incremental development approach",
+                options: [
+                    "Easier to get customer feedback.",
+                    "More rapid delivery",
+                    "The cost of accommodating changing customer requirements is reduced.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "10. COTS stands for...........",
+                options: [
+                    "Commercial Off-The-Shelf systems",
+                    "Commercial Off-The-Shelf states",
+                    "Commercial Off-The-System state",
+                    "None of the mentioned"
+                ],
+                answer: "Commercial Off-The-Shelf systems"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "11. Requirement engineering process includes which of these steps?",
+                options: [
+                    "Feasibility study",
+                    "Requirement Gathering",
+                    "Software Requirement specification & Validation",
+                    "All mentioned above"
+                ],
+                answer: "All mentioned above"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "12. Which software engineering activity focuses on transforming requirements into an executable system?",
+                options: [
+                    "Testing",
+                    "Maintenance",
+                    "Implementation",
+                    "Analysis"
+                ],
+                answer: "Implementation"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "13. What is the main goal of requirement engineering?",
+                options: [
+                    "Designing software interfaces",
+                    "Testing software products",
+                    "finding out and analyzing the services and constraints that the system should provide.",
+                    "Managing software projects"
+                ],
+                answer: "finding out and analyzing the services and constraints that the system should provide."
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "14. Which of the following is not a user of a user requirements document.",
+                options: [
+                    "Client Engineer",
+                    "Software Engineer",
+                    "Client Manager",
+                    "System Architect"
+                ],
+                answer: "Software Engineer"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "mcq",
+                question: "15. What is the primary difference between functional and non-functional requirements.",
+                options: [
+                    "Functional requirements are statements of services the system should provide, while non-functional requirements are statements of how the system should react to particular inputs.",
+                    "Functional requirements are statements of services the system should provide, while non-functional requirements are statements of how the system should behave in particular situations.",
+                    "Functional requirements are statements of services the system should provide, while non-functional requirements are statements of constraints on the services or functions offered by the system.",
+                    "None of the mentioned."
+                ],
+                answer: "Functional requirements are statements of services the system should provide, while non-functional requirements are statements of constraints on the services or functions offered by the system."
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "tf",
+                question: "1. It is often possible to identify which system components implement specific non-functional requirements.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "tf",
+                question: "2. Non-functional requirements affect the overall architecture of a system.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "tf",
+                question: "3. For large and complex systems, it is practically impossible to achieve consistency and completeness of requirements.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "tf",
+                question: "4. Completeness of requirement means that requirements should not have contradictory definitions.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "tf",
+                question: "5. Development processes are less challenging than maintenance processes.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "tf",
+                question: "6. Change is inevitable in all large software projects.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "tf",
+                question: "7. A prototype system is an example of 'Change tolerance' approach.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "tf",
+                question: "8. Program testing, where the system is executed using simulated test data, is the principal validation technique.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "tf",
+                question: "9. In incremental development, the customer can evaluate the system at an early stage to see if it delivers what is required.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 20-11-2024 (Midterm)",
+                type: "tf",
+                question: "10. There is no ideal software process.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "1. Which of the following is NOT a software engineering activity?",
+                options: [
+                    "Software specification",
+                    "Software validation",
+                    "Software procurement",
+                    "Software evolution"
+                ],
+                answer: "Software procurement"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "2. What's the difference between software engineering and computer science?",
+                options: [
+                    "Computer science focuses on theory and fundamentals, while software engineering is concerned with the practicalities of developing and delivering useful software.",
+                    "Computer science is concerned with the practicalities of developing and delivering useful software, while software engineering focuses on theory and fundamentals.",
+                    "None of the mentioned."
+                ],
+                answer: "Computer science focuses on theory and fundamentals, while software engineering is concerned with the practicalities of developing and delivering useful software."
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "3. What is the most important difference between generic software product development and custom software development?",
+                options: [
+                    "Generic software products are sold to many customers, while custom software is developed for a single customer.",
+                    "Generic software is always cheaper than custom software.",
+                    "Custom software is always of higher quality.",
+                    "There is no difference."
+                ],
+                answer: "Generic software products are sold to many customers, while custom software is developed for a single customer."
+            },
+            
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "5. COTS stands for..",
+                options: [
+                    "Commercial Off-The-Shelf systems",
+                    "Commercial Off-The-Shelf states",
+                    "Commercial Off-The-System state",
+                    "None of the mentioned"
+                ],
+                answer: "Commercial Off-The-Shelf systems"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "6. What of the following share considered as general issues that affect different types of software",
+                options: [
+                    "Security",
+                    "Business change",
+                    "Heterogeneity",
+                    "All of the mentioned"
+                ],
+                answer: "All of the mentioned"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "7. Confidentiality is a key ethical principle. This includes:",
+                options: [
+                    "Sharing all project details openly on social media.",
+                    "Protecting sensitive client information even after the project ends.",
+                    "Discussing project challenges with online forums anonymously.",
+                    "Disclosing project details to a competitor for personal gain"
+                ],
+                answer: "Protecting sensitive client information even after the project ends."
+            },
+            
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "9. Which of the following is a key advantage of the incremental development approach",
+                options: [
+                    "Easier to get customer feedback.",
+                    "More rapid delivery",
+                    "The cost of accommodating changing customer requirements is reduced.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "10. What is the meaning of requirement elicitation in software engineering?",
+                options: [
+                    "Gathering of requirement.",
+                    "Understanding of requirement.",
+                    "Getting the requirements from client.",
+                    "All of the above"
+                ],
+                answer: "All of the above"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "11. Which software engineering activity focuses on transforming requirements into an executable system?",
+                options: [
+                    "Testing",
+                    "Maintenance",
+                    "implementation",
+                    "Analysis"
+                ],
+                answer: "implementation"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "12. The general model of the design process could include..",
+                options: [
+                    "Design inputs.",
+                    "Design activities.",
+                    "Design outputs.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "13. Software testing is one element of a broader topic that is often referred to as",
+                options: [
+                    "Verification",
+                    "Validation",
+                    "Verification and Validation",
+                    "None of these"
+                ],
+                answer: "Verification and Validation"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "14. What is the main goal of requirement engineering?",
+                options: [
+                    "Designing software interfaces",
+                    "Testing software products",
+                    "finding out and analyzing the services and constraints that the system should provide.",
+                    "Managing software projects"
+                ],
+                answer: "finding out and analyzing the services and constraints that the system should provide."
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "15. Which of the following is a concern of product requirements?",
+                options: [
+                    "Reliability",
+                    "Usability",
+                    "Security",
+                    "All of the mentioned"
+                ],
+                answer: "All of the mentioned"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "16. Which of the following could define the SRS?",
+                options: [
+                    "It is the software requirements document.",
+                    "It is the software requirements specification.",
+                    "All of the mentioned",
+                    "None of the above"
+                ],
+                answer: "All of the mentioned"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "17. The user and system requirements should be........",
+                options: [
+                    "Clear",
+                    "Complete",
+                    "Easy to understand.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "18. Which of the following statements is best describes a structured natural language..............",
+                options: [
+                    "It is written in natural language on a standard form or template.",
+                    "It uses a language like a programming language, but with more abstract features to specify the requirements.",
+                    "It is graphical models supplemented by text annotations.",
+                    "All of the mentioned."
+                ],
+                answer: "It is written in natural language on a standard form or template."
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "19. Which one of the following is not a step of requirement engineering?",
+                options: [
+                    "elicitation",
+                    "design",
+                    "analysis",
+                    "documentation"
+                ],
+                answer: "design"
+            },
+            
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "21. How many activities are conducted in requirement engineering",
+                options: [
+                    "Three",
+                    "Four",
+                    "Five",
+                    "Six"
+                ],
+                answer: "Four"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "22. Which of the following could make the requirements elicitation a difficult process?",
+                options: [
+                    "Stakeholders often don't know what they want.",
+                    "Economic environment is dynamic.",
+                    "Business environment is dynamic",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "23. Effective interviewers with stakeholders should be......",
+                options: [
+                    "Open-minded.",
+                    "Willing to listen to stakeholders.",
+                    "Having the ability to prompt the interviewee.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "24. ......is an observational technique, where the system the working analyst immerses himself or herself in environment.",
+                options: [
+                    "Ethnography",
+                    "Scenarios",
+                    "Interviewing",
+                    "None of the mentioned"
+                ],
+                answer: "Ethnography"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "mcq",
+                question: "25. What does the term \"competence\" mean in software engineering ethics?",
+                options: [
+                    "You should knowingly accept work that is outside your competence.",
+                    "You should not misrepresent your level of competence.",
+                    "You should be careful to ensure that the intellectual property of employers.",
+                    "All of the mentioned."
+                ],
+                answer: "You should not misrepresent your level of competence."
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "1. For custom software, evolution costs often exceed development costs.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "2. SDLC is not a well-defined, structured sequence of stages in software engineering to develop the intended software product.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "3. There are no universal software engineering methods and techniques that are suitable for all systems and all companies.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "4. The agile model is the earliest SDLC approach that was used for software development.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "5. Development processes are less challenging than maintenance processes.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "6. Change is inevitable in all large software projects.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "7. A prototype system is an example of 'Change tolerance' approach.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "8. For large and complex systems, it is practically impossible to achieve requirements consistency and completeness.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "9. In agile-based approaches, it is preferred to collect user requirements incrementally and write these on cards as user stories.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "10. The IEEE standard document is considered an ideal SRS template for all applications.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "11. Ethnography could be considered as a complete approach for requirements elicitation.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "12. People usually find it easier to relate to real-life examples rather than abstract descriptions in requirements description.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "13. Interviews with stakeholders are normally a mixture of both closed and open interviews",
+                answer: "True"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "14. Using structured specifications removes some of the problems of natural language specification.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 22-5-2024 (Final)",
+                type: "tf",
+                question: "15. The intermediate stages in a reuse-oriented process are the same of the waterfall model.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "1. What is software?",
+                options: [
+                    "Software is documentation and configuration of data.",
+                    "Software is a set of programs.",
+                    "Software is a set of programs, and documentation.",
+                    "None of the mentioned."
+                ],
+                answer: "Software is a set of programs, and documentation."
+            },
+            
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "3. What does SDLC stand for?",
+                options: [
+                    "System Design Life Cycle",
+                    "Software Design Life Cycle",
+                    "Software Development Life Cycle",
+                    "System Development Life cycle"
+                ],
+                answer: "Software Development Life Cycle"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "4. What is the first step in the software development lifecycle?",
+                options: [
+                    "System Design",
+                    "Coding",
+                    "System Testing",
+                    "Preliminary Investigation and Analysis"
+                ],
+                answer: "Preliminary Investigation and Analysis"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "5. Which of these software engineering activities are not a part of software processes",
+                options: [
+                    "Software development",
+                    "Software dependence",
+                    "Software validation",
+                    "Software specification"
+                ],
+                answer: "Software dependence"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "6. What does the term \"software process\" refer to?",
+                options: [
+                    "A set Of activities that lead to the production of a software system.",
+                    "The physical environment in which software development takes place.",
+                    "The tools and technologies used in software development.",
+                    "The documentation produced during software development."
+                ],
+                answer: "A set Of activities that lead to the production of a software system."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "7. What is the difference between software engineering and computer science?",
+                options: [
+                    "Software engineering deals with hardware, while computer science deals with software.",
+                    "Software engineering is concerned with the development and evolution Of software systems, while computer science is concerned with the study Of algorithms and data structures.",
+                    "There is no difference.",
+                    "Computer science focuses on software engineering principles."
+                ],
+                answer: "Software engineering is concerned with the development and evolution Of software systems, while computer science is concerned with the study Of algorithms and data structures."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "8. Which of the following is NOT a benefit Of using a software development methodology?",
+                options: [
+                    "Improved communication and collaboration among stakeholders.",
+                    "Increased risk of project failure.",
+                    "Enhanced software quality.",
+                    "More efficient use of resources."
+                ],
+                answer: "Increased risk of project failure."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "9. .......are application systems that include all necessary functionality and do not need to be connected to a network.",
+                options: [
+                    "Stand-alone applications",
+                    "Interactive transaction-based applications",
+                    "Data collection systems",
+                    "AN of the mentioned"
+                ],
+                answer: "Stand-alone applications"
+            },
+            
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "11. COTS stands for",
+                options: [
+                    "Commercial Off-The-Shelf systems",
+                    "Commercial Off-The-Shelf states",
+                    "Commercial Off-The-System state",
+                    "None of the mentioned"
+                ],
+                answer: "Commercial Off-The-Shelf systems"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "12. What is software engineering ethics?",
+                options: [
+                    "The principles that govern the behavior of software engineers",
+                    "The study of computer ethics",
+                    "The principles that govern the behavior of computers",
+                    "All of the mentioned"
+                ],
+                answer: "The principles that govern the behavior of software engineers"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "13. Confidentiality is a key ethical principle. This includes:",
+                options: [
+                    "a Sharing all project details openly on social media.",
+                    "protecting sensitive client information even after the project ends.",
+                    "Discussing project challenges with online forums anonymously.",
+                    "Disclosing project details toa competitor for personal gain."
+                ],
+                answer: "protecting sensitive client information even after the project ends."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "14. Software engineers should not use their technical skills to misuse Other people's computers. Here the term misuse refers to:",
+                options: [
+                    "Unauthorized access to computer material",
+                    "Unauthorized modification Of computer material",
+                    "dissemination/spreading of viruses or other malware",
+                    "All Of the mentioned"
+                ],
+                answer: "All Of the mentioned"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "15. The goal of software processes is to ....,.,",
+                options: [
+                    "Define a clear set of steps to perform.",
+                    "Allow for review of work.",
+                    "c Specify actions to perform in the next stage.",
+                    "d All of the mentioned."
+                ],
+                answer: "d All of the mentioned."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "16. process descriptions may also include:",
+                options: [
+                    "and Post-conditions",
+                    "Roles",
+                    "Products",
+                    "All of the mentioned"
+                ],
+                answer: "All of the mentioned"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "17. The waterfall model of software development is suitable when",
+                options: [
+                    "The project is short.",
+                    "The best approach to use for projects with large development teams.",
+                    "There are no ambiguous requirements.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "18. What is the main drawback of the waterfall model?",
+                options: [
+                    "Lack of customer involvement",
+                    "Inability to handle large projects",
+                    "Limited documentation",
+                    "Slow development process"
+                ],
+                answer: "Slow development process"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "19. Which of the following software development approach is ngt applicable to projects that demand continuous maintenance?",
+                options: [
+                    "Agile development.",
+                    "DevOps deployment.",
+                    "The waterfall model.",
+                    "None of these."
+                ],
+                answer: "The waterfall model."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "20. Which of the following is true about non-functional requirements?",
+                options: [
+                    "They may define constraints on the system implementation.",
+                    "They are not directly concerned with the specific services delivered by the system to its users.",
+                    "Sometimes, they are more critical than individual functional requirements.",
+                    "All the mentioned."
+                ],
+                answer: "All the mentioned."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "21. Which of the following is an example of an ambiguous requirement?",
+                options: [
+                    "The software should be compatible with ios 17.4.1.",
+                    "The software should be fast.",
+                    "The software should be delivered by the end of the month.",
+                    "All of the mentioned."
+                ],
+                answer: "The software should be fast."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "22. A good software requirements having the following characteristic(s):",
+                options: [
+                    "Complete",
+                    "Consistent",
+                    "Clarity",
+                    "All of the above"
+                ],
+                answer: "All of the above"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "23. Which of the following is a functional requitement",
+                options: [
+                    "The system should allow users to log in using their email address or facebook account.",
+                    "The system Shall generate any report within minutes.",
+                    "The system shall encrypt user password.",
+                    "All of the mentioned"
+                ],
+                answer: "The system should allow users to log in using their email address or facebook account."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "24. Which of the following is a user of a user requitements document.",
+                options: [
+                    "Client engineer",
+                    "Software engineer",
+                    "Client Manager",
+                    "System Architect"
+                ],
+                answer: "Client Manager"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "25. Which of the following best describes 'Change tolerance'?",
+                options: [
+                    "This normal}/ involves some form of incremental development.",
+                    "Proposed changes may be implemented in increments that have not yet been developed",
+                    "The software process includes activities that con anticipate possible changes before significant rework is required.",
+                    "both a, and b."
+                ],
+                answer: "both a, and b."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "26. Software maintenance refers to:",
+                options: [
+                    "The initial development of a software system.",
+                    "Making changes to a software system after it has been deployed.",
+                    "Only fixing bugs in the software.",
+                    "Stopping the use of a software system that is no longer needed,"
+                ],
+                answer: "Making changes to a software system after it has been deployed."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "27. Software testing is one element of a broader topic that is often referred to as",
+                options: [
+                    "Verification",
+                    "Validation",
+                    "Verification and Validation.",
+                    "None of these"
+                ],
+                answer: "Verification and Validation."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "28. What are the different levels of Testing?",
+                options: [
+                    "Component testing",
+                    "System testing",
+                    "Acceptance testing",
+                    "All of the above"
+                ],
+                answer: "All of the above"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "29. Requirement engineering process includes which of these steps?",
+                options: [
+                    "feasibility study",
+                    "Requirement Gathering",
+                    "Software requirement specification g validation",
+                    "All mentioned above."
+                ],
+                answer: "All mentioned above."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "30. What is the meaning of requirement elicitation in software engineering?",
+                options: [
+                    "Gathering of requirement.",
+                    "Understanding of requitement.",
+                    "Getting the requirements from client.",
+                    "All mentioned above."
+                ],
+                answer: "All mentioned above."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "31. Which of the following is an example of a reusable software component?",
+                options: [
+                    "Web services.",
+                    ".Net framework.",
+                    "J2EE.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "32. What are the two fundamental types of software product?",
+                options: [
+                    "System software and application software.",
+                    "Open-source software and closed-source software.",
+                    "Generic products and customized products.",
+                    "Freeware and shareware."
+                ],
+                answer: "Generic products and customized products."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "33. which of the following is a potential drawback of the incremental development approach?",
+                options: [
+                    "increments System structure tends to degrade as new increments are added.",
+                    "Limited opportunities for stakeholder involvement.",
+                    "Incompatibility with agile development methodologies.",
+                    "Inability to deliver a working product incrementally."
+                ],
+                answer: "increments System structure tends to degrade as new increments are added."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "34. ............is an observational technique, where the system analyst immerses himself or herself in the working environment.",
+                options: [
+                    "Ethnography",
+                    "Scenarios",
+                    "Interviewing",
+                    "None of the mentioned"
+                ],
+                answer: "Ethnography"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "36. Effective interviewers with stakeholders should be........",
+                options: [
+                    "Open-minded.",
+                    "Willing to listen to stakeholders.",
+                    "Having the ability to prompt the interviewee.",
+                    "All of the mentioned."
+                ],
+                answer: "All of the mentioned."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "37. Which of the following should be included in the scenario description.",
+                options: [
+                    "A description of the normal flow of events in the scenario.",
+                    "A description of what can go wrong.",
+                    "c A description of the system state when the scenario finishes.",
+                    "All of the mentioned"
+                ],
+                answer: "All of the mentioned"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "38. What is the purpose of requirements validation in software specification?",
+                options: [
+                    "To identify potential risks and develop strategies to mitigate them",
+                    "To ensure that the requirements are complete, consistent, and correct.",
+                    "To evaluate and prioritize the requirements based on their importance and feasibility.",
+                    "To check if the requirements are technically feasible or not."
+                ],
+                answer: "To ensure that the requirements are complete, consistent, and correct."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "39. Which of the following should be included in the scenario description.",
+                options: [
+                    "A description of the normal flow of events in the scenario.",
+                    "A description of what can go wrong.",
+                    "CLA description of the system state when the scenario finishes.",
+                    "All of the mentioned"
+                ],
+                answer: "All of the mentioned"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "mcq",
+                question: "40. Which of the following is a potential drawback of reuse-oriented software engineering?",
+                options: [
+                    "Higher risks",
+                    "Sometimes leads to a system that does not meet the real needs of users.",
+                    "Increased development time due to extensive documentation.",
+                    "All of the mentioned."
+                ],
+                answer: "Sometimes leads to a system that does not meet the real needs of users."
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "1. SDLC is not a well-defined, structured sequence of stages in software engineering to develop the intended software product.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "2. User requirements contains more detailed descriptions of the software functions, services, and operational constraints.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "3. Requirements elicitation is a cyclic process.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "4. For systems with a long life, maintenance costs may be several times development costs.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "5. There are no universal software engineering methods and techniques that are suitable for all systems and all companies.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "6. In practice, most practical processes include elements of both plan-driven and agile approaches.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "7. The waterfall model is an example Of an agile process.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "8. In Plan-driven processes, all Of the process activities are planned in advance and progress is measured against this plan.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "9. The intermediate stages in a reuse-oriented process are the same Of the waterfall model.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "10. A prototype system is an example of iChange avoidance' approach.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "11. For large and complex systems, it is practically impossible to achieve requirements consistency and completeness",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "12. Natural language is a way Of writing system requirements where the freedom of the requirements writer is limited.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "13. People usually find it easier to relate to abstract descriptions rather than real-life examples in requirements description.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "14. Conflicting requirements are common in requirement engineering, With each Client proposing his or her version is the right one.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "15. Requirements should not specify 'how' but should only specify 'what'.",
+                answer: "False"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "16. When writing natural language requirements, it is recommended to associate a rationale with each user requirement.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "17. In agile-based approaches, it is preferred to collect user requirements incrementally and write these on cards as stories.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "18. Non-functional requirements affect the overall architecture of a system.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "19. A single non-functional requirement may generate number of related functional requirements that define new system services that are required.",
+                answer: "True"
+            },
+            {
+                exam: "Date: 30-3-2023 (Final)",
+                type: "tf",
+                question: "20. Ethnography could be considered as a complete approach for requirements elicitation.",
+                answer: "True"
+            }
+        ];
+
+
+        const quizForm = document.getElementById('quiz-form');
+        const submitButton = document.getElementById('submit-btn');
+        const resultsContainer = document.getElementById('results');
+        let currentExam = "";
+
+        // Dynamically build the quiz
+        quizData.forEach((q, index) => {
+            // Add exam heading
+            if (q.exam !== currentExam) {
+                currentExam = q.exam;
+                const examHeading = document.createElement('h2');
+                examHeading.textContent = currentExam;
+                quizForm.appendChild(examHeading);
+            }
+
+            // Create question block
+            const questionBlock = document.createElement('div');
+            questionBlock.className = 'question-block';
+            questionBlock.id = `q-block-${index}`;
+
+            // Add question text
+            const questionText = document.createElement('p');
+            questionText.className = 'question-text';
+            questionText.innerHTML = q.question; // Use innerHTML to render image tags
+            questionBlock.appendChild(questionText);
+
+            // Add options
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
+
+            if (q.type === 'mcq') {
+                q.options.forEach(option => {
+                    const label = document.createElement('label');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `q${index}`;
+                    radio.value = option;
+                    label.appendChild(radio);
+                    label.appendChild(document.createTextNode(` ${option}`));
+                    optionsContainer.appendChild(label);
+                });
+            } else if (q.type === 'tf') {
+                ['True', 'False'].forEach(option => {
+                    const label = document.createElement('label');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `q${index}`;
+                    radio.value = option;
+                    label.appendChild(radio);
+                    label.appendChild(document.createTextNode(` ${option}`));
+                    optionsContainer.appendChild(label);
+                });
+            }
+
+            questionBlock.appendChild(optionsContainer);
+            quizForm.appendChild(questionBlock);
+        });
+
+        // Add event listener to submit button
+        submitButton.addEventListener('click', () => {
+            let score = 0;
+            quizData.forEach((q, index) => {
+                const questionBlock = document.getElementById(`q-block-${index}`);
+                const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+
+                // Reset styles
+                questionBlock.classList.remove('correct', 'incorrect');
+
+                if (selectedOption) {
+                    if (selectedOption.value === q.answer) {
+                        score++;
+                        questionBlock.classList.add('correct');
+                    } else {
+                        questionBlock.classList.add('incorrect');
+                    }
+                } else {
+                    questionBlock.classList.add('incorrect');
+                }
+            });
+
+            // Display results
+            const totalQuestions = quizData.length;
+            const percentage = (score / totalQuestions) * 100;
+            resultsContainer.textContent = `You scored ${score} out of ${totalQuestions} (${percentage.toFixed(1)}%)`;
+            
+            if (percentage >= 50) {
+                resultsContainer.className = 'pass';
+            } else {
+                resultsContainer.className = 'fail';
+            }
+            
+            // Scroll to results
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+
+    </script>
+</body>
+</html>
